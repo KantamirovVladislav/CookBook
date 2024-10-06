@@ -52,6 +52,7 @@ dependencies {
 
     implementation(libs.play.services.wearable)
     implementation(platform(libs.compose.bom))
+    implementation(libs.navigation.compose)
     implementation(libs.ui)
     implementation(libs.ui.tooling.preview)
     implementation(libs.compose.material)

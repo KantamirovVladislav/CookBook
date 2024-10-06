@@ -11,23 +11,18 @@ import java.io.InputStream
 import java.io.InputStreamReader
 
 
-// Функция для чтения рецептов
 fun readRecipesFromAssets(context: Context): List<RecipeData> {
     val assetManager = context.assets
     val recipeList = mutableListOf<RecipeData>()
 
-    // Получаем список всех файлов в папке assets
     val files = assetManager.list("") ?: return emptyList()
 
-    // Проходим по каждому .txt файлу
     for (fileName in files) {
         if (fileName.endsWith(".txt")) {
             val title = fileName.removeSuffix(".txt")
 
-            // Читаем содержимое .txt файла
             val content = readFileContentFromAssets(context, fileName)
 
-            // Проверяем, есть ли изображение с таким же названием
             val imageFileName = "$title.jpg"
             val image: Painter? = if (files.contains(imageFileName)) {
                 loadImageFromAssets(context, imageFileName)
@@ -35,7 +30,6 @@ fun readRecipesFromAssets(context: Context): List<RecipeData> {
                 null
             }
 
-            // Добавляем в список рецепт, если изображение найдено
             if (image != null) {
                 val recipe = RecipeData(title, content, image)
                 recipeList.add(recipe)
@@ -46,8 +40,7 @@ fun readRecipesFromAssets(context: Context): List<RecipeData> {
     return recipeList
 }
 
-// Функция для чтения содержимого текстового файла
-fun readFileContentFromAssets(context: Context, fileName: String): String {
+private fun readFileContentFromAssets(context: Context, fileName: String): String {
     val assetManager = context.assets
     val stringBuilder = StringBuilder()
 
@@ -64,16 +57,10 @@ fun readFileContentFromAssets(context: Context, fileName: String): String {
     return stringBuilder.toString()
 }
 
-fun loadImageFromAssets(context: Context, imageFileName: String): Painter {
+private fun loadImageFromAssets(context: Context, imageFileName: String): Painter {
     val assetManager = context.assets
     val inputStream: InputStream = assetManager.open(imageFileName)
 
-    // Загружаем Bitmap
-    val bitmap = BitmapFactory.decodeStream(inputStream)
 
-    // Преобразуем Bitmap в ImageBitmap
-    val imageBitmap: ImageBitmap = bitmap.asImageBitmap()
-
-    // Возвращаем Painter
-    return BitmapPainter(imageBitmap)
+    return BitmapPainter(BitmapFactory.decodeStream(inputStream).asImageBitmap())
 }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -24,13 +25,18 @@ import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
+import com.example.cookbook.presentation.local.RecipeData
 import readRecipesFromAssets
 
 
 @Composable
-fun RecipeScreen(context: Context) {
+fun RecipeScreen(
+    context: Context,
+    onRecipeClick: (RecipeData) -> Unit
+) {
     val allRecipe = readRecipesFromAssets(context)
 
     LazyColumn(
@@ -44,6 +50,7 @@ fun RecipeScreen(context: Context) {
                     .height((LocalConfiguration.current.screenHeightDp.dp / 4))
                     .padding(4.dp)
                     .background(color = Color.DarkGray, shape = RoundedCornerShape(15))
+                    .clickable { onRecipeClick(recipe) }
             ) {
                 Image(
                     painter = recipe.image,
